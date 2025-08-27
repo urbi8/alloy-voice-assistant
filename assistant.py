@@ -17,7 +17,7 @@ from speech_recognition import Microphone, Recognizer, UnknownValueError
 
 load_dotenv()
 
-
+# 1st  class
 class WebcamStream:
     def __init__(self):
         self.stream = VideoCapture(index=0)
@@ -62,14 +62,14 @@ class WebcamStream:
     def __exit__(self, exc_type, exc_value, exc_traceback):
         self.stream.release()
 
-
+# 2nd class
 class Assistant:
     def __init__(self, model):
         self.chain = self._create_inference_chain(model)
 
     def answer(self, prompt, image):
         if not prompt:
-            return
+            return 
 
         print("Prompt:", prompt)
 
@@ -133,10 +133,11 @@ class Assistant:
             history_messages_key="chat_history",
         )
 
-
+# 3rd input
 webcam_stream = WebcamStream().start()
 
-model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest")
+# model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest")
+model = ChatOpenAI(model="gpt-4o")
 
 # You can use OpenAI's GPT-4o model instead of Gemini Flash
 # by uncommenting the following line:
@@ -144,7 +145,7 @@ model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest")
 
 assistant = Assistant(model)
 
-
+# 4th input
 def audio_callback(recognizer, audio):
     try:
         prompt = recognizer.recognize_whisper(audio, model="base", language="english")
@@ -153,9 +154,10 @@ def audio_callback(recognizer, audio):
     except UnknownValueError:
         print("There was an error processing the audio.")
 
-
+# 5th input
 recognizer = Recognizer()
 microphone = Microphone()
+
 with microphone as source:
     recognizer.adjust_for_ambient_noise(source)
 
@@ -169,3 +171,4 @@ while True:
 webcam_stream.stop()
 cv2.destroyAllWindows()
 stop_listening(wait_for_stop=False)
+
